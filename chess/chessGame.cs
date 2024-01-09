@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Windows.Forms;
 
@@ -44,6 +45,8 @@ namespace chess
         List<string> whiteCapturedPawns = new List<string> { };
         List<string> blackCapturedPawns = new List<string> { };
         List<(int, int)> validMoves = new List<(int, int)> { };
+        (int, int) whiteEp = (10, 10);
+        (int, int) blackEp = (10, 10);
         int selection = 100;
         // 0 --> White Turn no selection
         // 1 --> White Turn Piece Selected
@@ -134,24 +137,17 @@ namespace chess
 
         private void SwitchPlayerTurn()
         {
-            // Stop the timer for the current player
-            if (currentTurnStep == 0 || currentTurnStep == 1)
-            {
-                whiteTimer.Stop();  // Stop the timer for the white player
-                blackTimer.Start(); // Start the timer for the black player
+            if (currentTurnStep <= 1){
+                whiteTimer.Stop();  
+                blackTimer.Start(); 
+            } else {
+                blackTimer.Stop();
+                whiteTimer.Start();
             }
-            else
-            {
-                blackTimer.Stop();  // Stop the timer for the black player
-                whiteTimer.Start(); // Start the timer for the white player
-            }
-
-            // Switch the player's turn
-            // currentPlayer = (currentTurnStep == 0 || currentTurnStep == 1) ? Player.Black : Player.White;
 
             // Update the label to show the current player
-            // currentPlayerLabel.Text = $"{(currentPlayer == Player.White ? "WHITE" : "BLACK")}";
-            // currentPlayerLabel.ForeColor = currentPlayer == Player.White ? Color.White : Color.Black;
+            currentPlayerLabel.Text = $"{(currentTurnStep <= 1 ? "WHITE" : "BLACK")}";
+            currentPlayerLabel.ForeColor = currentTurnStep <= 1 ? Color.White : Color.Black;
         }
 
         private void blackTimer_Tick(object sender, EventArgs e)
@@ -293,7 +289,7 @@ namespace chess
                     for (int i = 0; i < blackOptions.Count; i++) {
                         if (blackOptions[i].Contains(kingLocation)) {
                             if (counter < 15) {
-                                screen.DrawRectangle(new Pen(Color.DarkRed, 5), kingLocation.Item1 * 100 + 1, kingLocation.Item2 * 100 + 1, 100, 100);
+                                screen.DrawRectangle(new Pen(Color.DarkRed, 5), kingLocation.Item1 * tileSize + xOffset, kingLocation.Item2 * tileSize + yOffset, tileSize, tileSize);
                             }
                         }
                     }
@@ -302,11 +298,10 @@ namespace chess
                 if (blackPawns.Contains("king")) {
                     int kingIndex = blackPawns.IndexOf("king");
                     (int, int) kingLocation = blackLocations[kingIndex];
-
                     for (int i = 0; i < whiteOptions.Count; i++) {
                         if (whiteOptions[i].Contains(kingLocation)) {
                             if (counter < 15) {
-                                screen.DrawRectangle(new Pen(Color.DarkBlue, 5), kingLocation.Item1 * 100 + 1, kingLocation.Item2 * 100 + 1, 100, 100);
+                                screen.DrawRectangle(new Pen(Color.DarkBlue, 5), kingLocation.Item1 * tileSize + xOffset, kingLocation.Item2 * tileSize + yOffset, tileSize, tileSize);
                             }
                         }
                     }
@@ -549,6 +544,12 @@ namespace chess
                 {
                     movesList.Add((position.Item1 - 1, position.Item2 + 1));
                 }
+                if ((position.Item1 + 1, position.Item2 + 1) == blackEp) {
+                    movesList.Add((position.Item1 + 1, position.Item2 + 1));
+                }
+                if ((position.Item1 - 1, position.Item2 + 1) == blackEp) {
+                    movesList.Add((position.Item1 - 1, position.Item2 + 1));
+                }
             } else {
                 if (!whiteLocations.Contains((position.Item1, position.Item2 - 1)) &&
                     !blackLocations.Contains((position.Item1, position.Item2 - 1)) && position.Item2 > 0)
@@ -566,6 +567,12 @@ namespace chess
                 }
                 if (whiteLocations.Contains((position.Item1 - 1, position.Item2 - 1)))
                 {
+                    movesList.Add((position.Item1 - 1, position.Item2 - 1));
+                }
+                if ((position.Item1 + 1, position.Item2 - 1) == whiteEp) {
+                    movesList.Add((position.Item1 + 1, position.Item2 - 1));
+                }
+                if ((position.Item1 - 1, position.Item2 - 1) == whiteEp) {
                     movesList.Add((position.Item1 - 1, position.Item2 - 1));
                 }
             }
@@ -600,6 +607,26 @@ namespace chess
             return movesList;
         }
 
+        public (int, int) CheckEP((int, int) oldCoords, (int, int) newCoords)
+        {
+            (int, int) epCoords;
+            string piece;
+            if (currentTurnStep <= 1) {
+                int index = whiteLocations.IndexOf(oldCoords);
+                epCoords = (newCoords.Item1, newCoords.Item2 - 1);
+                piece = whitePawns[index];
+            } else {
+                int index = blackLocations.IndexOf(oldCoords);
+                epCoords = (newCoords.Item1, newCoords.Item2 + 1);
+                piece = blackPawns[index];
+            }
+            if (piece == "pawn" && Math.Abs(oldCoords.Item2 - newCoords.Item2) > 1) {} 
+            else {
+                epCoords = (100, 100);
+            }
+            return epCoords;
+        }
+
         private void Handle_Click(object sender, MouseEventArgs e)
         {
             int yCord = ( e.Y - yOffset ) / 75;
@@ -617,6 +644,7 @@ namespace chess
                 }
 
                 if (validMoves.Contains(clickCords) && selection != 100) {
+                    whiteEp = CheckEP(whiteLocations[selection], clickCords);
                     whiteLocations[selection] = clickCords;
                     if (blackLocations.Contains(clickCords)) {
                         int blackPiece = blackLocations.IndexOf(clickCords);
@@ -627,8 +655,17 @@ namespace chess
                         blackPawns.RemoveAt(blackPiece);
                         blackLocations.RemoveAt(blackPiece);
                     }
+
+                    if (clickCords == blackEp) {
+                        int blackPiece = blackLocations.IndexOf((blackEp.Item1, blackEp.Item2 - 1));
+                        whiteCapturedPawns.Append(blackPawns[blackPiece]);
+                        blackPawns.RemoveAt(blackPiece);
+                        blackLocations.RemoveAt(blackPiece);
+                        // blackMoved.RemoveAt(blackPiece);
+                    }
                     blackOptions = CheckOptions(blackPawns, blackLocations, "black");
                     whiteOptions = CheckOptions(whitePawns, whiteLocations, "white");
+                    SwitchPlayerTurn();
                     currentTurnStep = 2;
                     selection = 100;
                     validMoves = new List<(int, int)>{};
@@ -645,6 +682,7 @@ namespace chess
                 }
 
                 if (validMoves.Contains(clickCords) && selection != 100) {
+                    blackEp = CheckEP(blackLocations[selection], clickCords);
                     blackLocations[selection] = clickCords;
                     if (whiteLocations.Contains(clickCords)) {
                         int whitePiece = whiteLocations.IndexOf(clickCords);
@@ -655,8 +693,18 @@ namespace chess
                         whitePawns.RemoveAt(whitePiece);
                         whiteLocations.RemoveAt(whitePiece);
                     }
+
+                    if (clickCords == whiteEp) {
+                        int whitePiece = whiteLocations.IndexOf((whiteEp.Item1, whiteEp.Item2 + 1));
+                        blackCapturedPawns.Append(whitePawns[whitePiece]);
+                        whitePawns.RemoveAt(whitePiece);
+                        whiteLocations.RemoveAt(whitePiece);
+                        // whiteMoved.RemoveAt(whitePiece);
+                    }
+
                     blackOptions = CheckOptions(blackPawns, blackLocations, "black");
                     whiteOptions = CheckOptions(whitePawns, whiteLocations, "white");
+                    SwitchPlayerTurn();
                     currentTurnStep = 0;
                     selection = 100;
                     validMoves = new List<(int, int)> { };
@@ -671,5 +719,5 @@ namespace chess
                 gameOn = false;
                 Application.Exit();
             }
-        }
+    }
 }

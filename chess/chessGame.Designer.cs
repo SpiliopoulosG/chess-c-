@@ -49,7 +49,7 @@
             this.Timer2.Cursor = System.Windows.Forms.Cursors.Arrow;
             this.Timer2.Font = new System.Drawing.Font("Showcard Gothic", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Timer2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(254)))), ((int)(((byte)(81)))), ((int)(((byte)(109)))));
-            this.Timer2.Location = new System.Drawing.Point(691, 832);
+            this.Timer2.Location = new System.Drawing.Point(691, 23);
             this.Timer2.Margin = new System.Windows.Forms.Padding(4);
             this.Timer2.Name = "Timer2";
             this.Timer2.ReadOnly = true;
@@ -88,7 +88,7 @@
             this.Timer1.Cursor = System.Windows.Forms.Cursors.Default;
             this.Timer1.Font = new System.Drawing.Font("Showcard Gothic", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Timer1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(254)))), ((int)(((byte)(81)))), ((int)(((byte)(109)))));
-            this.Timer1.Location = new System.Drawing.Point(691, 17);
+            this.Timer1.Location = new System.Drawing.Point(691, 830);
             this.Timer1.Margin = new System.Windows.Forms.Padding(4);
             this.Timer1.Name = "Timer1";
             this.Timer1.ReadOnly = true;
