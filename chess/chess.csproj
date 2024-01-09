@@ -46,41 +46,38 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ChessPiece.cs">
+    <Compile Include="chess.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.cs">
+    <Compile Include="chess.Designer.cs">
+      <DependentUpon>chess.cs</DependentUpon>
+    </Compile>
+    <Compile Include="chessGame.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Form2.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Form2.Designer.cs">
-      <DependentUpon>Form2.cs</DependentUpon>
+    <Compile Include="chessGame.Designer.cs">
+      <DependentUpon>chessGame.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
-    <Compile Include="PromotionDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="PromotionDialog.Designer.cs">
-      <DependentUpon>PromotionDialog.cs</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="chess.resx">
+      <DependentUpon>chess.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form2.resx">
-      <DependentUpon>Form2.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="PromotionDialog.resx">
-      <DependentUpon>PromotionDialog.cs</DependentUpon>
+    <EmbeddedResource Include="chessGame.resx">
+      <DependentUpon>chessGame.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
@@ -102,52 +99,77 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\PawnB.png" />
+    <None Include="Resources\rookwhite.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\PawnW.png" />
+    <None Include="Resources\rookblack.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\RookW.png" />
+    <None Include="Resources\queenwhite.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\RookB.bmp" />
+    <None Include="Resources\queenblack.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\RookB.png" />
+    <None Include="Resources\pawnwhite.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\KnightW.png" />
+    <None Include="Resources\pawnblack.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\KnightB.png" />
+    <None Include="Resources\knightwhite.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\BishopB.png" />
+    <None Include="Resources\knightblack.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\BishopW.png" />
+    <None Include="Resources\kingwhite.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\KingB.png" />
+    <None Include="Resources\kingblack.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\KingW.png" />
+    <None Include="Resources\bishopwhite.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\QueenB.png" />
+    <None Include="Resources\bishopblack.png" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <None Include="images\bishopblack.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\QueenW.png" />
+    <None Include="images\bishopwhite.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\esma-q-MCC1g6Ziw-unsplash %281%29.jpg" />
+    <None Include="images\kingblack.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Board.png" />
+    <None Include="images\kingwhite.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\try1.png" />
+    <None Include="images\knightblack.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\knightwhite.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\pawnblack.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\pawnwhite.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\queenblack.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\queenwhite.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\rookblack.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\rookwhite.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
