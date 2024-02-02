@@ -99,7 +99,6 @@ namespace chess
             whiteTimer.Tick += whiteTimer_Tick;
             whiteTimer.Start();
 
-
             blackOptions = CheckOptions(blackPawns, blackLocations, "black");
             whiteOptions = CheckOptions(whitePawns, whiteLocations, "white");
 
@@ -126,7 +125,7 @@ namespace chess
         private void PaintTimer_Tick(object sender, EventArgs e)
         {
             if (gameOn) {
-                Refresh(); // This will trigger the Paint event and repaint the form
+                Refresh();
             }
         }
 
@@ -288,9 +287,8 @@ namespace chess
                     (int, int) kingLocation = whiteLocations[kingIndex];
                     for (int i = 0; i < blackOptions.Count; i++) {
                         if (blackOptions[i].Contains(kingLocation)) {
-                            if (counter < 15) {
                                 screen.DrawRectangle(new Pen(Color.DarkRed, 5), kingLocation.Item1 * tileSize + xOffset, kingLocation.Item2 * tileSize + yOffset, tileSize, tileSize);
-                            }
+
                         }
                     }
                 }
@@ -300,9 +298,7 @@ namespace chess
                     (int, int) kingLocation = blackLocations[kingIndex];
                     for (int i = 0; i < whiteOptions.Count; i++) {
                         if (whiteOptions[i].Contains(kingLocation)) {
-                            if (counter < 15) {
                                 screen.DrawRectangle(new Pen(Color.DarkBlue, 5), kingLocation.Item1 * tileSize + xOffset, kingLocation.Item2 * tileSize + yOffset, tileSize, tileSize);
-                            }
                         }
                     }
                 }
@@ -322,8 +318,8 @@ namespace chess
             int ballSize = 8;
             for (int i = 0; i < moves.Count; i++)
             {
-                int x = moves[i].Item1 * 75 + (tileSize / 2) + xOffset - ballSize / 2;
-                int y = moves[i].Item2 * 75 + (tileSize / 2) + yOffset - ballSize / 2;
+                int x = moves[i].Item1 * tileSize + (tileSize / 2) + xOffset - ballSize / 2;
+                int y = moves[i].Item2 * tileSize + (tileSize / 2) + yOffset - ballSize / 2;
                 screen.FillEllipse(new SolidBrush(Color.FromName(color)), x, y, ballSize, ballSize);
             }
         }
@@ -593,7 +589,7 @@ namespace chess
                 friendsList = blackLocations;
                 enemiesList = whiteLocations;
             }
-
+            // Relative Path
             List<(int, int)> targets = new List<(int, int)> { (1, 2), (1, -2), (2, 1), (2, -1), (-1, 2), (-1, -2), (-2, 1), (-2, -1) };
 
             for (int i = 0; i < 8; i++) {
@@ -629,8 +625,8 @@ namespace chess
 
         private void Handle_Click(object sender, MouseEventArgs e)
         {
-            int yCord = ( e.Y - yOffset ) / 75;
-            int xCord= ( e.X - xOffset ) / 75 ;
+            int yCord = ( e.Y - yOffset ) / tileSize;
+            int xCord= ( e.X - xOffset ) / tileSize;
             (int, int) clickCords = (xCord, yCord);
             Console.WriteLine($"{clickCords}");
             Console.WriteLine($"{currentTurnStep}");
@@ -651,6 +647,7 @@ namespace chess
                         whiteCapturedPawns.Append(blackPawns[blackPiece]);
                         if (blackPawns[blackPiece] == "king") {
                             winner = "white";
+                            gameOn = false;
                         }
                         blackPawns.RemoveAt(blackPiece);
                         blackLocations.RemoveAt(blackPiece);
@@ -661,7 +658,6 @@ namespace chess
                         whiteCapturedPawns.Append(blackPawns[blackPiece]);
                         blackPawns.RemoveAt(blackPiece);
                         blackLocations.RemoveAt(blackPiece);
-                        // blackMoved.RemoveAt(blackPiece);
                     }
                     blackOptions = CheckOptions(blackPawns, blackLocations, "black");
                     whiteOptions = CheckOptions(whitePawns, whiteLocations, "white");
@@ -710,9 +706,6 @@ namespace chess
                     validMoves = new List<(int, int)> { };
                 }
             }
-
-            // Handle the click based on the row and column
-            // MessageBox.Show($"({xCord}, {yCord})");
         }
 
         private void cross_Click(object sender, EventArgs e) {

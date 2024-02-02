@@ -27,7 +27,6 @@ namespace chess
         }
 
         private void startGame_Click_1(object sender, EventArgs e) {
-            //checkarei an einai ola letters 
             if (Player1.Text.All(c => char.IsLetter(c) || char.IsWhiteSpace(c)) && Player2.Text.All(c => char.IsLetter(c) || char.IsWhiteSpace(c))) {
                 string timer = TimeLimit.Text;
                 bool validtimer = Regex.IsMatch(timer, @"^[0-9]?[0-9]:[0-9][0-9]$");
